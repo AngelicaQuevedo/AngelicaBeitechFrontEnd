@@ -1,0 +1,92 @@
+<h1>{{tituloP}}</h1>
+
+{{titulo}}
+
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+
+<ul id="shopBeitech-list">
+	<li class="loading">
+
+		<img id ="ima" src="../../assets/images/loader.gif" />
+
+	</li>
+    <select [(ngModel)]="selectedValue" (ngModelChange)="getProductosPerCustomer2(selectedValue)" >
+     <option value="" [selected]="isSelected"> Please choose one </option>
+    <option *ngFor=" #i of customers" [value]="i.customerId">{{i.name}}</option>
+</select>
+</ul>
+
+
+  <!--<ul>
+    <li *ngFor="# p of products">
+      {{ p.description }} <a  class="btn btn-eliminar">Adicionar</a>
+    </li>
+  </ul> -->
+    
+
+ <table>
+
+ 	  
+        <th style="width: 20%">
+            <mfDefaultSorter by="name">name</mfDefaultSorter>
+        </th>
+        <th style="width: 30%">
+            <mfDefaultSorter by="description">description</mfDefaultSorter>
+        </th>
+         <th style="width: 30%">
+            <mfDefaultSorter by="description">Category</mfDefaultSorter>
+        </th>
+    
+        <th style="width: 20%">
+            <mfDefaultSorter by="description">Action</mfDefaultSorter>
+        </th>
+       
+  
+    <tr *ngFor=" #item of products">
+        <td>{{item.name}}</td>
+        <td>{{item.description}}</td>
+         <td>{{item.categoryId}}</td>
+
+        <td><a class="btn btn-ver">Adicionar</a></td>
+
+    </tr>
+
+
+
+</table>
+   
+   <br>
+    <h1>Generate Order</h1>
+    <br>
+
+	<section> 
+
+		please enter the following information:
+		<br>
+		<br>
+    <div>
+		Delivey date: <input type="text" name="fname"><br>
+		<br>
+		
+		Delivery address: <input type="text" name="fname"><br>
+   </div>
+
+
+	</section>
+	
