@@ -34,6 +34,24 @@ System.register(["angular2/core", "angular2/http", "rxjs/add/operator/map"], fun
                     return this._http.get("http://localhost:8090/webapp/API/GetAllowedProductsByCustomer/" + id)
                         .map(function (res) { return res.json(); });
                 };
+                /*addOrder(order: Order,idC:number) {
+                    let json = JSON.stringify(order);
+                    let params = "json="+json;
+                    let headers = new Headers({'Content-Type':'application/json'});
+            
+                    return this._http.post("http://localhost:8090/webapp/API/AddOrder/"+idC,
+                            params, {headers: headers}).map(res => res.json());
+                }*/
+                TiendaService.prototype.addOrder = function (order, idC) {
+                    var data = JSON.stringify(order);
+                    var params = data;
+                    var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+                    return this._http.post("http://localhost:8090/webapp/API/AddOrder/" + idC, params, { headers: headers }).map(function (res) { return res.json(); });
+                };
+                TiendaService.prototype.getOrdersPerCustomer = function (idCx) {
+                    return this._http.get("http://localhost:8090/webapp/API/GetOrdersByCustomer/" + idCx)
+                        .map(function (res) { return res.json(); });
+                };
                 TiendaService = __decorate([
                     core_1.Injectable(), 
                     __metadata('design:paramtypes', [http_1.Http])

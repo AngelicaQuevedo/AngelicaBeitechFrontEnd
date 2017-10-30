@@ -1,4 +1,4 @@
-System.register(["angular2/core", "../services/customerData.service", "../model/Product"], function(exports_1, context_1) {
+System.register(["angular2/core", "../services/customerData.service", "../model/Product", "../model/Order"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(["angular2/core", "../services/customerData.service", "../model/
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, customerData_service_1, Product_1;
+    var core_1, customerData_service_1, Product_1, Order_1;
     var CustomerListComponent;
     return {
         setters:[
@@ -22,6 +22,9 @@ System.register(["angular2/core", "../services/customerData.service", "../model/
             },
             function (Product_1_1) {
                 Product_1 = Product_1_1;
+            },
+            function (Order_1_1) {
+                Order_1 = Order_1_1;
             }],
         execute: function() {
             CustomerListComponent = (function () {
@@ -33,13 +36,17 @@ System.register(["angular2/core", "../services/customerData.service", "../model/
                     this.myHero = this.heroes[0];
                     this.orden = "Productos para ordenar:";
                     this.productosOrder = [];
+                    this.flag = false;
+                    this.flag2 = false;
                 }
                 CustomerListComponent.prototype.ngOnInit = function () {
                     var id;
-                    this.productInd = new Product_1.Product();
+                    var idC;
+                    var idCx;
                     this.getCustomers();
                     this.getProductosPerCustomer2();
                     this.productosOrder = [];
+                    this.imprimir();
                     console.log("customer-list component cargado");
                 };
                 CustomerListComponent.prototype.getCustomers = function () {
@@ -62,28 +69,66 @@ System.register(["angular2/core", "../services/customerData.service", "../model/
                         }
                     });
                 };
-                CustomerListComponent.prototype.imprimir = function (name) {
-                    console.log("este es el nombre" + " " + name);
+                CustomerListComponent.prototype.imprimir = function (name, idC) {
+                    //console.log(this.productosOrder);
+                    //console.log(name);
+                    //console.log(val);
+                    var _this = this;
+                    var ordenFinal = new Order_1.Order();
+                    //ordenFinal.setidCliente(val);
+                    ordenFinal.setdeliveryAddress(name);
+                    ordenFinal.setproducts(this.productosOrder);
+                    ordenFinal.setdeliveryAddress(name);
+                    //var id = ordenFinal.getidCliente();
+                    var pro = ordenFinal.getproducts();
+                    var del = ordenFinal.getdeliveryAddress();
+                    console.log(pro);
+                    console.log(del);
+                    this._customerService.addOrder(ordenFinal, idC)
+                        .subscribe(function (result) {
+                        _this.messagefull = result.addOrderMessage;
+                        _this.statusOrden = result.returnMessage;
+                        console.log(_this.statusOrden);
+                        if (_this.statusOrden == "success") {
+                            _this.flag = true;
+                        }
+                        if (_this.statusOrden !== "success") {
+                            alert("Error en el servidor");
+                        }
+                    }, function (error) {
+                        _this.errorMessageFinal = error;
+                        if (_this.errorMessageFinal !== null) {
+                            console.log(_this.errorMessageFinal);
+                        }
+                    });
                 };
-                CustomerListComponent.prototype.log = function (productIdt, name, description) {
+                CustomerListComponent.prototype.cleanDialo = function () {
+                    this.flag = false;
+                };
+                CustomerListComponent.prototype.log = function (productIdt, name, description, price) {
+                    var productInd = new Product_1.Product();
                     console.log("BuenaFuncion" + " " + productIdt + " " + name + " " + description);
                     productInd.setproductId(productIdt);
                     productInd.setName(name);
+                    productInd.setproductPrice(price);
                     productInd.setDescription(description);
                     var id = productInd.getproductId();
                     var nombre = productInd.getName();
                     var des = productInd.getDescription();
-                    //let productosOrder:Product[];
+                    var pr = productInd.getproductPrice();
                     this.productosOrder.push(productInd);
                     console.log(productInd);
-                    console.log(productosOrder);
+                    console.log(this.productosOrder);
                 };
                 CustomerListComponent.prototype.cleanArray = function () {
                     this.productosOrder = [];
                 };
                 CustomerListComponent.prototype.delete = function (index) {
                     if (window.confirm('really removing current row?')) {
-                        this.productosOrder.splice(index, 1);
+                        //this.productosOrder.splice(index,1);
+                        //console.log("Orden final"+" "+this.productosOrder.length);
+                        //console.log("este es el indice"+" "+index)
+                        return this.productosOrder.splice(index, 1);
                     }
                     else {
                         return false;
@@ -106,7 +151,22 @@ System.register(["angular2/core", "../services/customerData.service", "../model/
                         }
                     });
                 };
-                CustomerListComponent.prototype.prepareOrder = function (id) {
+                CustomerListComponent.prototype.getOrdersPerCustomers = function (idCx) {
+                    var _this = this;
+                    this._customerService.getOrdersPerCustomer(idCx)
+                        .subscribe(function (result) {
+                        _this.arrayOrders = result.orders;
+                        _this.status3 = result.returnCode;
+                        console.log(_this.arrayOrders);
+                        if (_this.status3 !== 0) {
+                            alert("Error en el servidor");
+                        }
+                    }, function (error) {
+                        _this.errorMessage = error;
+                        if (_this.errorMessage !== null) {
+                            console.log(_this.errorMessage);
+                        }
+                    });
                 };
                 CustomerListComponent = __decorate([
                     core_1.Component({

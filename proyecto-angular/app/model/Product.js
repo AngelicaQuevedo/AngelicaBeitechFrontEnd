@@ -26,6 +26,12 @@ System.register([], function(exports_1, context_1) {
                 Product.prototype.setDescription = function (description) {
                     this.description = description;
                 };
+                Product.prototype.getproductPrice = function () {
+                    return this.productPrice;
+                };
+                Product.prototype.setproductPrice = function (productPrice) {
+                    this.productPrice = productPrice;
+                };
                 return Product;
             }());
             exports_1("Product", Product);

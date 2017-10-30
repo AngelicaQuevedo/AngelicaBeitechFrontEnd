@@ -2,9 +2,10 @@ import {Category} from "../model/Category"
 
 export class Product{
 
-        public productId:number;
+    public productId:number;
 		public name:string;
 		public description:string;
+    public productPrice:number;
 		//category: Category;
 
 	constructor(
@@ -45,6 +46,15 @@ export class Product{
 
           this.description =description;
       }
+      
+       public getproductPrice(){
 
+         return this.productPrice;
+      }
+
+      public setproductPrice(productPrice:number){
+
+          this.productPrice =productPrice;
+      }
 	{}
 }

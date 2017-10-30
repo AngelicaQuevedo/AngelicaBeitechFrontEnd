@@ -6,6 +6,10 @@ import {Product} from "../model/Product";
 import { CommonModule } from "@angular/common";
 import { Component } from '@angular/core'
 import {Order} from "../model/Order";
+import {Ng2PaginationModule} from 'ng2-pagination';
+import {DataTableModule} from "angular2-datatable";
+
+
 
 
 @Component({
@@ -15,7 +19,9 @@ import {Order} from "../model/Order";
 
 })
 
-export class CustomerListComponent implements OnInit {
+
+
+export class CustomerListComponent {
 
 	public tituloP:string = "Bienvenidos a su tienda Virtual!";
 	public titulo:string = "Seleccione un cliente:";
@@ -30,11 +36,16 @@ export class CustomerListComponent implements OnInit {
 	public prueb:string;
 	public orden:String= "Productos para ordenar:";
 	public elements:String[];
-    public productosOrder: Product[] = [];
-    public productInd:Product;
-
-	
-
+    public  productosOrder: Product[]=[];
+    public  productInd:Product;	
+    public  ordenFinal : Order;
+    public  statusOrden:String;
+    public errorMessageFinal;
+    public flag :Boolean = false;
+	 public flag2 :Boolean = false;
+     public messagefull:String;
+     public arrayOrders:Order[];
+     public status3: number;
 	
 
 	
@@ -43,11 +54,14 @@ export class CustomerListComponent implements OnInit {
 
  	ngOnInit() {
  	let id:number;
-   
-     this.productInd = new Product();
+ 	let idC:number;
+ 	let idCx:number;
+    
+     
      this.getCustomers();
      this.getProductosPerCustomer2();
      this.productosOrder = [];
+     this.imprimir();
 
  	console.log("customer-list component cargado");}
 
@@ -85,29 +99,83 @@ export class CustomerListComponent implements OnInit {
 	}
     
 
- imprimir(name){
+ imprimir(name,idC){
 
- 	console.log("este es el nombre"+" "+name)
+ 	//console.log(this.productosOrder);
+ 	//console.log(name);
+ 	//console.log(val);
+
+ 
+ 	var ordenFinal = new Order();
+ 	//ordenFinal.setidCliente(val);
+ 	ordenFinal.setdeliveryAddress(name);
+ 	ordenFinal.setproducts(this.productosOrder);
+ 	ordenFinal.setdeliveryAddress(name);
+     //var id = ordenFinal.getidCliente();
+     var pro = ordenFinal.getproducts();
+     var del = ordenFinal.getdeliveryAddress();
+    
+    console.log(pro);
+ 	console.log(del);
+
+     this._customerService.addOrder(ordenFinal,idC)
+	 .subscribe( result =>{
+
+	     this.messagefull =result.addOrderMessage;
+	     this.statusOrden = result.returnMessage;
+         
+          console.log(this.statusOrden);
+         if(this.statusOrden=="success"){
+
+         	this.flag =true;
+         }
+
+	     if(this.statusOrden!=="success"){
+
+	     alert("Error en el servidor")
+	     }
+
+	     
+	 },
+
+	 error =>{
+       this.errorMessageFinal = <any>error;
+       if(this.errorMessageFinal!==null){
+
+        console.log(this.errorMessageFinal);
+  
+       }
+
+	 }
+
+	 );
+
  }
+
+     cleanDialo(){
+     this.flag =false;
+     
+     }
    
 
-    log(productIdt,name,description) {
+    log(productIdt,name,description,price) {
 
-
- console.log("BuenaFuncion"+" "+productIdt+" "+name+" "+description);
+  var productInd = new Product();	
+  console.log("BuenaFuncion"+" "+productIdt+" "+name+" "+description);
 
    
    productInd.setproductId(productIdt); 
    productInd.setName(name);
+   productInd.setproductPrice(price);
    productInd.setDescription(description);
    var id = productInd.getproductId();
    var nombre = productInd.getName();
    var des= productInd.getDescription();
-   //let productosOrder:Product[];
+   var pr= productInd.getproductPrice();
 
    this.productosOrder.push(productInd);
    console.log(productInd);
-   console.log(productosOrder);
+   console.log(this.productosOrder);
  }
 
     
@@ -117,9 +185,12 @@ export class CustomerListComponent implements OnInit {
 
     }
 
-    delete(index) {
+    delete(index):Product[] {
   if(window.confirm('really removing current row?')) {
-    this.productosOrder.splice(index,1);
+    //this.productosOrder.splice(index,1);
+    //console.log("Orden final"+" "+this.productosOrder.length);
+    //console.log("este es el indice"+" "+index)
+    return this.productosOrder.splice(index,1);
   } else {
     return false;
   }
@@ -155,10 +226,37 @@ export class CustomerListComponent implements OnInit {
 	 );
 	}
 
-	prepareOrder(id){
+	 getOrdersPerCustomers(idCx){
 
-     
+	 this._customerService.getOrdersPerCustomer(idCx)
+	 .subscribe( result =>{
 
+	     this.arrayOrders =result.orders;
+	     this.status3 = result.returnCode;
+         
+          console.log( this.arrayOrders);
+	     if(this.status3!==0){
+
+	     alert("Error en el servidor")
+	     }
+
+	     
+	 },
+
+	 error =>{
+       this.errorMessage = <any>error;
+       if(this.errorMessage!==null){
+
+        console.log(this.errorMessage);
+  
+       }
+
+	 }
+
+	 );
 	}
+
+
+
 
 	}

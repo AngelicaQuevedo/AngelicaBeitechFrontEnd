@@ -12,6 +12,7 @@ import {CustomerListComponent} from "./components/customer-list.component";
 
 
 
+
 export class AppComponent{
 	public titulo:string = "Tienda Beitech";
 
