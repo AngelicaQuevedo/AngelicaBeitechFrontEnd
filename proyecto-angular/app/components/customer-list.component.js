@@ -1,4 +1,4 @@
-System.register(["angular2/core", "../services/customerData.service"], function(exports_1, context_1) {
+System.register(["angular2/core", "../services/customerData.service", "../model/Product"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(["angular2/core", "../services/customerData.service"], function(
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, customerData_service_1;
+    var core_1, customerData_service_1, Product_1;
     var CustomerListComponent;
     return {
         setters:[
@@ -19,6 +19,9 @@ System.register(["angular2/core", "../services/customerData.service"], function(
             },
             function (customerData_service_1_1) {
                 customerData_service_1 = customerData_service_1_1;
+            },
+            function (Product_1_1) {
+                Product_1 = Product_1_1;
             }],
         execute: function() {
             CustomerListComponent = (function () {
@@ -29,11 +32,14 @@ System.register(["angular2/core", "../services/customerData.service"], function(
                     this.heroes = ['Windstorm', 'Bombasto', 'Magneta', 'Tornado'];
                     this.myHero = this.heroes[0];
                     this.orden = "Productos para ordenar:";
+                    this.productosOrder = [];
                 }
                 CustomerListComponent.prototype.ngOnInit = function () {
                     var id;
+                    this.productInd = new Product_1.Product();
                     this.getCustomers();
                     this.getProductosPerCustomer2();
+                    this.productosOrder = [];
                     console.log("customer-list component cargado");
                 };
                 CustomerListComponent.prototype.getCustomers = function () {
@@ -55,6 +61,33 @@ System.register(["angular2/core", "../services/customerData.service"], function(
                             console.log(_this.errorMessage);
                         }
                     });
+                };
+                CustomerListComponent.prototype.imprimir = function (name) {
+                    console.log("este es el nombre" + " " + name);
+                };
+                CustomerListComponent.prototype.log = function (productIdt, name, description) {
+                    console.log("BuenaFuncion" + " " + productIdt + " " + name + " " + description);
+                    productInd.setproductId(productIdt);
+                    productInd.setName(name);
+                    productInd.setDescription(description);
+                    var id = productInd.getproductId();
+                    var nombre = productInd.getName();
+                    var des = productInd.getDescription();
+                    //let productosOrder:Product[];
+                    this.productosOrder.push(productInd);
+                    console.log(productInd);
+                    console.log(productosOrder);
+                };
+                CustomerListComponent.prototype.cleanArray = function () {
+                    this.productosOrder = [];
+                };
+                CustomerListComponent.prototype.delete = function (index) {
+                    if (window.confirm('really removing current row?')) {
+                        this.productosOrder.splice(index, 1);
+                    }
+                    else {
+                        return false;
+                    }
                 };
                 CustomerListComponent.prototype.getProductosPerCustomer2 = function (id) {
                     var _this = this;

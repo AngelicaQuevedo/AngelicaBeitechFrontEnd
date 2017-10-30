@@ -30,6 +30,10 @@ export class CustomerListComponent implements OnInit {
 	public prueb:string;
 	public orden:String= "Productos para ordenar:";
 	public elements:String[];
+    public productosOrder: Product[] = [];
+    public productInd:Product;
+
+	
 
 	
 
@@ -40,8 +44,10 @@ export class CustomerListComponent implements OnInit {
  	ngOnInit() {
  	let id:number;
    
-    this.getCustomers();
+     this.productInd = new Product();
+     this.getCustomers();
      this.getProductosPerCustomer2();
+     this.productosOrder = [];
 
  	console.log("customer-list component cargado");}
 
@@ -79,8 +85,47 @@ export class CustomerListComponent implements OnInit {
 	}
     
 
- 
+ imprimir(name){
+
+ 	console.log("este es el nombre"+" "+name)
+ }
+   
+
+    log(productIdt,name,description) {
+
+
+ console.log("BuenaFuncion"+" "+productIdt+" "+name+" "+description);
+
+   
+   productInd.setproductId(productIdt); 
+   productInd.setName(name);
+   productInd.setDescription(description);
+   var id = productInd.getproductId();
+   var nombre = productInd.getName();
+   var des= productInd.getDescription();
+   //let productosOrder:Product[];
+
+   this.productosOrder.push(productInd);
+   console.log(productInd);
+   console.log(productosOrder);
+ }
+
     
+    cleanArray(){
+
+   this.productosOrder = [];
+
+    }
+
+    delete(index) {
+  if(window.confirm('really removing current row?')) {
+    this.productosOrder.splice(index,1);
+  } else {
+    return false;
+  }
+}
+
+
 
 	getProductosPerCustomer2(id){
 

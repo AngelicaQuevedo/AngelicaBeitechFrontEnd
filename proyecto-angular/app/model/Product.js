@@ -6,14 +6,30 @@ System.register([], function(exports_1, context_1) {
         setters:[],
         execute: function() {
             Product = (function () {
-                function Product(productId, name, description, category) {
-                    this.productId = productId;
-                    this.name = name;
-                    this.description = description;
+                function Product() {
                 }
+                Product.prototype.getproductId = function () {
+                    return this.productId;
+                };
+                Product.prototype.setproductId = function (productId) {
+                    this.productId = productId;
+                };
+                Product.prototype.getName = function () {
+                    return this.name;
+                };
+                Product.prototype.setName = function (name) {
+                    this.name = name;
+                };
+                Product.prototype.getDescription = function () {
+                    return this.description;
+                };
+                Product.prototype.setDescription = function (description) {
+                    this.description = description;
+                };
                 return Product;
             }());
             exports_1("Product", Product);
+            { }
         }
     }
 });
