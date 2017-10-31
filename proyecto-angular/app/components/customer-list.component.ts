@@ -8,6 +8,7 @@ import { Component } from '@angular/core'
 import {Order} from "../model/Order";
 import {Ng2PaginationModule} from 'ng2-pagination';
 import {DataTableModule} from "angular2-datatable";
+import {ProductsOrder} from "../model/ProductsOrder";
 
 
 
@@ -36,7 +37,7 @@ export class CustomerListComponent {
 	public prueb:string;
 	public orden:String= "Productos para ordenar:";
 	public elements:String[];
-    public  productosOrder: Product[]=[];
+    public  productosOrder: Product[5];
     public  productInd:Product;	
     public  ordenFinal : Order;
     public  statusOrden:String;
@@ -46,8 +47,12 @@ export class CustomerListComponent {
      public messagefull:String;
      public arrayOrders:Order[];
      public status3: number;
-	
-
+	public mensajeError:String;
+	public returnCode:number;
+    public flag3 :Boolean = false;
+    public  addOrderMessage:String;
+    public productsOrder :ProductsOrder[];
+    public orderDetail :Order[];
 	
 
   constructor(private _customerService: TiendaService){}
@@ -104,7 +109,12 @@ export class CustomerListComponent {
  	//console.log(this.productosOrder);
  	//console.log(name);
  	//console.log(val);
+    
+    if (this.productosOrder.length>5){
 
+      	     alert("you should register max 5 productos")
+
+    }else {
  
  	var ordenFinal = new Order();
  	//ordenFinal.setidCliente(val);
@@ -116,15 +126,26 @@ export class CustomerListComponent {
      var del = ordenFinal.getdeliveryAddress();
     
     console.log(pro);
- 	console.log(del);
+ 	//console.log(del);
+
+
 
      this._customerService.addOrder(ordenFinal,idC)
 	 .subscribe( result =>{
 
 	     this.messagefull =result.addOrderMessage;
 	     this.statusOrden = result.returnMessage;
+         this.returnCode = result.returnCode;
          
           console.log(this.statusOrden);
+           if(this.returnCode== 2){
+
+         	this.mensajeError =result.returnMessage;
+         	this.addOrderMessage = result.addOrderMessage;
+            alert(this.mensajeError)
+            this.flag3 = true;
+         }
+
          if(this.statusOrden=="success"){
 
          	this.flag =true;
@@ -149,11 +170,13 @@ export class CustomerListComponent {
 	 }
 
 	 );
+	}
 
  }
 
      cleanDialo(){
      this.flag =false;
+     this.flag3= false;
      
      }
    
@@ -174,15 +197,15 @@ export class CustomerListComponent {
    var pr= productInd.getproductPrice();
 
    this.productosOrder.push(productInd);
-   console.log(productInd);
-   console.log(this.productosOrder);
+   //console.log(productInd);
+  // console.log(this.productosOrder);
  }
 
     
     cleanArray(){
 
    this.productosOrder = [];
-
+   this.arrayOrders =[];
     }
 
     delete(index):Product[] {
@@ -233,8 +256,9 @@ export class CustomerListComponent {
 
 	     this.arrayOrders =result.orders;
 	     this.status3 = result.returnCode;
-         
-          console.log( this.arrayOrders);
+         this.productsOrder= result.orders[0];
+         console.log( this.arrayOrders);
+         console.log( this.productsOrder);
 	     if(this.status3!==0){
 
 	     alert("Error en el servidor")

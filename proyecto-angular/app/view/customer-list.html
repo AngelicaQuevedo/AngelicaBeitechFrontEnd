@@ -136,10 +136,12 @@ tr:nth-child(even) {
      <br>
 
     <div *ngIf="flag" class="alert alert-success box-msg" role="alert">
-        <strong>{{messagefull}}</strong> Your products has been saved.
+        <strong>{{messagefull}}</strong> 
     </div>
-
-     
+     <br>
+     <div *ngIf="flag3" class="alert alert-success box-msg" role="alert">
+        <strong>{{addOrderMessage}}</strong> 
+    </div>
     
     
 
@@ -157,18 +159,26 @@ tr:nth-child(even) {
      <table>
 
     
-        <th style="width: 20%">
+        <th style="width: 5%">
             <mfDefaultSorter by="name">OrderId</mfDefaultSorter>
         </th>
-        <th style="width: 30%">
+        <th style="width: 10%">
             <mfDefaultSorter by="description">Creation Date</mfDefaultSorter>
         </th>
-         <th style="width: 30%">
+         <th style="width: 10%">
             <mfDefaultSorter by="description">Delivery Address</mfDefaultSorter>
         </th>
     
-        <th style="width: 20%">
+        <th style="width: 30%">
             <mfDefaultSorter by="description">Delivey Date</mfDefaultSorter>
+        </th>
+
+        <th style="width: 10%">
+            <mfDefaultSorter by="description">Total</mfDefaultSorter>
+        </th>
+
+        <th style="width: 40%">
+            <mfDefaultSorter by="description">Detail</mfDefaultSorter>
         </th>
        
   
@@ -177,7 +187,8 @@ tr:nth-child(even) {
         <td>{{ord.creationDate}}</td>
         <td>{{ord.deliveryAddress}}</td>
          <td>{{ord.deliveryDate}}</td>
-
+        <td>${{ord.total}}</td>
+        <td><span *ngFor=" #i of ord.orderDetails"><br>{{i.detailDescription}}</span></td>
     </tr>
  
 

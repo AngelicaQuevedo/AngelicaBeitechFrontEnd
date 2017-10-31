@@ -35,10 +35,12 @@ System.register(["angular2/core", "../services/customerData.service", "../model/
                     this.heroes = ['Windstorm', 'Bombasto', 'Magneta', 'Tornado'];
                     this.myHero = this.heroes[0];
                     this.orden = "Productos para ordenar:";
-                    this.productosOrder = [];
+                    this.productosOrder = 5;
                     this.flag = false;
                     this.flag2 = false;
+                    this.flag3 = false;
                 }
+                ;
                 CustomerListComponent.prototype.ngOnInit = function () {
                     var id;
                     var idC;
@@ -74,36 +76,49 @@ System.register(["angular2/core", "../services/customerData.service", "../model/
                     //console.log(name);
                     //console.log(val);
                     var _this = this;
-                    var ordenFinal = new Order_1.Order();
-                    //ordenFinal.setidCliente(val);
-                    ordenFinal.setdeliveryAddress(name);
-                    ordenFinal.setproducts(this.productosOrder);
-                    ordenFinal.setdeliveryAddress(name);
-                    //var id = ordenFinal.getidCliente();
-                    var pro = ordenFinal.getproducts();
-                    var del = ordenFinal.getdeliveryAddress();
-                    console.log(pro);
-                    console.log(del);
-                    this._customerService.addOrder(ordenFinal, idC)
-                        .subscribe(function (result) {
-                        _this.messagefull = result.addOrderMessage;
-                        _this.statusOrden = result.returnMessage;
-                        console.log(_this.statusOrden);
-                        if (_this.statusOrden == "success") {
-                            _this.flag = true;
-                        }
-                        if (_this.statusOrden !== "success") {
-                            alert("Error en el servidor");
-                        }
-                    }, function (error) {
-                        _this.errorMessageFinal = error;
-                        if (_this.errorMessageFinal !== null) {
-                            console.log(_this.errorMessageFinal);
-                        }
-                    });
+                    if (this.productosOrder.length > 5) {
+                        alert("you should register max 5 productos");
+                    }
+                    else {
+                        var ordenFinal = new Order_1.Order();
+                        //ordenFinal.setidCliente(val);
+                        ordenFinal.setdeliveryAddress(name);
+                        ordenFinal.setproducts(this.productosOrder);
+                        ordenFinal.setdeliveryAddress(name);
+                        //var id = ordenFinal.getidCliente();
+                        var pro = ordenFinal.getproducts();
+                        var del = ordenFinal.getdeliveryAddress();
+                        console.log(pro);
+                        //console.log(del);
+                        this._customerService.addOrder(ordenFinal, idC)
+                            .subscribe(function (result) {
+                            _this.messagefull = result.addOrderMessage;
+                            _this.statusOrden = result.returnMessage;
+                            _this.returnCode = result.returnCode;
+                            console.log(_this.statusOrden);
+                            if (_this.returnCode == 2) {
+                                _this.mensajeError = result.returnMessage;
+                                _this.addOrderMessage = result.addOrderMessage;
+                                alert(_this.mensajeError);
+                                _this.flag3 = true;
+                            }
+                            if (_this.statusOrden == "success") {
+                                _this.flag = true;
+                            }
+                            if (_this.statusOrden !== "success") {
+                                alert("Error en el servidor");
+                            }
+                        }, function (error) {
+                            _this.errorMessageFinal = error;
+                            if (_this.errorMessageFinal !== null) {
+                                console.log(_this.errorMessageFinal);
+                            }
+                        });
+                    }
                 };
                 CustomerListComponent.prototype.cleanDialo = function () {
                     this.flag = false;
+                    this.flag3 = false;
                 };
                 CustomerListComponent.prototype.log = function (productIdt, name, description, price) {
                     var productInd = new Product_1.Product();
@@ -117,11 +132,12 @@ System.register(["angular2/core", "../services/customerData.service", "../model/
                     var des = productInd.getDescription();
                     var pr = productInd.getproductPrice();
                     this.productosOrder.push(productInd);
-                    console.log(productInd);
-                    console.log(this.productosOrder);
+                    //console.log(productInd);
+                    // console.log(this.productosOrder);
                 };
                 CustomerListComponent.prototype.cleanArray = function () {
                     this.productosOrder = [];
+                    this.arrayOrders = [];
                 };
                 CustomerListComponent.prototype.delete = function (index) {
                     if (window.confirm('really removing current row?')) {
@@ -157,7 +173,9 @@ System.register(["angular2/core", "../services/customerData.service", "../model/
                         .subscribe(function (result) {
                         _this.arrayOrders = result.orders;
                         _this.status3 = result.returnCode;
+                        _this.productsOrder = result.orders[0];
                         console.log(_this.arrayOrders);
+                        console.log(_this.productsOrder);
                         if (_this.status3 !== 0) {
                             alert("Error en el servidor");
                         }

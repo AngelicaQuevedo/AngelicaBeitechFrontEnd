@@ -1,10 +1,11 @@
-import {Product} from "../model/Product"
+import {Product} from "../model/Products"
 export class Order{
 
 
 		public idCliente:number;
 		public deliveryAddress:String;
-        public productsToOrder:Product[];
+    public productsToOrder:Product[];
+    public orderDetails:orderDetails[];
 		
 
 
@@ -48,6 +49,18 @@ export class Order{
 
         this.deliveryAddress =deliveryAddress;
       }
+
+       public getOrderDetails (){
+
+         return this.orderDetails;
+      }
+
+
+      public  setOrderDetails(orderDetails:OrderDetails[]){
+
+        this.orderDetails =orderDetails;
+      }
+
 
       
 

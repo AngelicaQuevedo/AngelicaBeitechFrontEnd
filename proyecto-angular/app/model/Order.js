@@ -26,6 +26,12 @@ System.register([], function(exports_1, context_1) {
                 Order.prototype.setdeliveryAddress = function (deliveryAddress) {
                     this.deliveryAddress = deliveryAddress;
                 };
+                Order.prototype.getOrderDetails = function () {
+                    return this.orderDetails;
+                };
+                Order.prototype.setOrderDetails = function (orderDetails) {
+                    this.orderDetails = orderDetails;
+                };
                 return Order;
             }());
             exports_1("Order", Order);
